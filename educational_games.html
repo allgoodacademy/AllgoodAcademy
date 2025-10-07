@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Literata:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Libraries for interactive hero -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
     <style>
@@ -19,12 +20,13 @@
         /* Style for the active navigation link */
         .active-nav-link {
             font-weight: 600;
-            color: #D34716; /* allgood-burnt-orange: #D34716 - FIXED */
+            color: #E76F51; /* allgood-burnt-orange */
             text-decoration: underline;
-            text-decoration-color: #D34716; /* allgood-burnt-orange: #D34716 - FIXED */
+            text-decoration-color: #E76F51; /* allgood-burnt-orange */
             text-decoration-thickness: 2px;
             text-underline-offset: 6px;
         }
+        /* ENSURE IFRAME IS FULL WIDTH, HEIGHT IS NOW HANDLED BY CONTENT FLOW AND BROWSER SCROLL */
         /* #course-view iframe { height: calc(100vh - 116px); } - REMOVED FIXED HEIGHT */
         
         /* Styles for collapsible sections */
@@ -38,13 +40,13 @@
         }
         .collapsible-section.open .collapsible-arrow {
             transform: rotate(180deg);
-            color: #D34716; /* Change color to burnt orange: #D34716 when open - FIXED */
+            color: #E76F51; /* Change color to burnt orange when open */
         }
         .plus-text {
-            color: #D34716; /* Burnt Orange: #D34716 - FIXED */
+            color: #E76F51; /* Burnt Orange */
         }
         .nav-link:hover .plus-text, .active-nav-link .plus-text {
-            color: #357889; /* Deep Cyan: #357889 - FIXED */
+            color: #0A9396; /* Light Cyan */
         }
         
         /* Base tile link style */
@@ -68,7 +70,7 @@
             transform: translate(-50%, -50%);
             z-index: 50;
             box-shadow: 0 12px 20px 8px rgba(0, 0, 0, 0.4);
-            border-color: #D34716; /* Burnt Orange Border: #D34716 - FIXED */
+            border-color: #E76F51; /* Burnt Orange Border */
             max-width: 600px; /* Dynamic width */
             width: auto;
             min-width: 320px; /* Added a minimum width */
@@ -128,12 +130,12 @@
                         'inter': ['Inter', 'sans-serif'],
                         'literata': ['Literata', 'serif'],
                     },
-                    // Allgood Academy Brand Colors - FIXED TO USE OFFICIAL HEX CODES
+                    // Allgood Academy Brand Colors
                     colors: {
-                        'allgood-dark-cyan': '#357889',      /* --brand-secondary / Deep Cyan - FIXED */
-                        'allgood-light-cyan': '#357889',     /* Mapping to Deep Cyan for consistency - FIXED */
-                        'allgood-burnt-orange': '#D34716',   /* --brand-primary / Burnt Orange - FIXED */
-                        'allgood-light-orange': '#EB8D69',   /* --brand-hover-light - FIXED */
+                        'allgood-dark-cyan': '#005F73',
+                        'allgood-light-cyan': '#0A9396',
+                        'allgood-burnt-orange': '#E76F51',
+                        'allgood-light-orange': '#F4A261',
                     },
                     fontSize: {
                         'xxs': ['0.6rem', { lineHeight: '0.9rem' }],
@@ -145,32 +147,44 @@
 </head>
 <body class="bg-allgood-dark-cyan text-gray-800 font-inter">
 
+    <!-- Header and Navigation -->
     <header class="bg-white shadow-md sticky top-0 z-50">
         <nav class="px-8 py-4">
             <div class="container mx-auto flex items-center justify-between">
+                <!-- Logo on the left (Allgood Academy Image Logo) -->
                 <a href="index.html" class="cursor-pointer">
                     <img src="https://i.ibb.co/ynkwWGhF/New-Transparent-Logo-1.png" alt="Allgood Academy Logo" class="h-12 w-auto">
                 </a>
                 
+                <!-- Navigation Links on the right -->
                 <div id="main-nav" class="flex items-center space-x-2 sm:space-x-4 md:space-x-6">
                     
+                    <!-- Home Dropdown -->
                     <div class="relative group">
+                        <!-- Main Home Link (retains dropdown functionality) -->
                         <a href="index.html" class="nav-link text-allgood-dark-cyan hover:text-allgood-light-cyan transition duration-300 px-3 py-2 text-sm sm:text-lg font-literata font-bold whitespace-nowrap flex items-center focus:outline-none">
                             <span>Home</span>
                             <svg class="w-4 h-4 ml-1 transform group-hover:rotate-180 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                             </svg>
                         </a>
+                        <!-- Dropdown Content: Only Contact Us -->
                         <div class="absolute left-0 w-40 bg-white rounded-md shadow-lg py-1 z-50 hidden group-hover:block">
+                            <!-- FIXED: Updated to point to the internal contact_us.html file -->
                             <a href="contact_us.html" class="block px-4 py-2 text-sm text-allgood-dark-cyan hover:bg-gray-100 hover:text-allgood-light-cyan transition-colors duration-200">Contact Us</a>
                         </div>
                     </div>
+                    <!-- END Home Dropdown -->
+
+                    <!-- Educational Games (ACTIVE LINK) -->
                     <a href="educational_games.html" class="nav-link active-nav-link transition duration-300 px-3 py-2 text-sm sm:text-lg font-literata font-bold whitespace-nowrap">Educational Games</a>
 
+                    <!-- Purpose-Driven Learning (UPDATED LINK) -->
                     <a href="purpose_driven_learning.html" class="nav-link text-allgood-dark-cyan hover:text-allgood-light-cyan transition duration-300 px-3 py-2 text-sm sm:text-lg font-literata font-bold whitespace-nowrap">
                         Purpose-Driven Learning
                     </a>
                     
+                    <!-- Dropdown Menu: Other Allgood Things (Simplified) -->
                     <div class="relative group">
                         <button class="nav-link text-allgood-dark-cyan hover:text-allgood-light-cyan transition duration-300 px-3 py-2 text-sm sm:text-lg font-literata font-bold whitespace-nowrap flex items-center focus:outline-none">
                             <span>Other Allgood Things</span>
@@ -187,21 +201,26 @@
         </nav>
     </header>
     
+    <!-- Modal overlay -->
     <div id="modal-overlay" class="modal-overlay"></div>
 
+    <!-- Page Content Wrapper -->
     <div id="page-content">
         <main id="educational-games" class="page container mx-auto px-6 py-12">
+             <!-- Increased max-width to 6xl for 3-up layout -->
              <div class="max-w-6xl mx-auto"> 
                 <section class="text-center mb-16">
                     <h1 class="font-literata text-4xl md:text-5xl font-bold text-white mb-6">
                         The <span class="text-allgood-burnt-orange">Educational Games</span> Catalog
                     </h1>
+                    <!-- UPDATED: Introductory paragraph for context and mission alignment (purposeful -> pragmatic) -->
                     <p class="text-white/90 text-lg max-w-4xl mx-auto leading-relaxed">
                         Welcome to our <strong>Free Games Hub</strong>! We believe the best way to move from <span class="font-semibold">passive learning</span> into 
                         <span class="font-semibold text-allgood-burnt-orange">pragmatic action</span> is by doing. Dive into our collection of interactive challenges designed to help you build practical skills, master new topics, and achieve real-world results in a fun, engaging way.
                     </p>
                 </section>
                 <div class="space-y-6">
+                    <!-- Collapsible Section 1: Entrepreneurial Mindset & Strategy (Open by default) -->
                     <div class="collapsible-section bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden open">
                         <button class="collapsible-header w-full flex justify-between items-center p-6 sm:p-8 text-left">
                             <h2 class="font-literata text-xl sm:text-2xl font-bold text-allgood-dark-cyan">Entrepreneurial Mindset & Strategy</h2>
@@ -210,14 +229,18 @@
                         <div class="collapsible-content">
                             <div class="px-6 sm:px-8 pb-8 pt-0">
                                 <div class="border-t border-gray-200 pt-6">
+                                    <!-- Grid updated for 3 columns on large screens -->
                                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"> 
+                                        <!-- Game Tile 1: JOLENE'S LEMONADE CHALLENGE (Updated Style) -->
                                         <div class="course-tile-link group bg-white rounded-xl shadow-lg border-t-8 border-allgood-burnt-orange transition-all duration-300 flex flex-col overflow-hidden text-center cursor-pointer" data-course-url="https://theallgoodacademy.s3.us-east-2.amazonaws.com/Jolene's+Lemonade+Stand/index.html.txt" data-game-id="jolene-lemonade">
                                             <div class="p-4 flex flex-col flex-grow course-content-short">
+                                                <!-- THUMBNAIL ADDED HERE - UPDATED: Reduced width to w-3/4 and centered with mx-auto -->
                                                 <img src="https://theallgoodacademy.s3.us-east-2.amazonaws.com/images/Thumbnail.jolenelemonadechallenge.png" alt="Thumbnail for Jolene's Lemonade Challenge game" class="w-3/4 h-auto rounded-md mb-3 border border-gray-100 mx-auto">
                                                 
                                                 <h3 class="font-literata text-lg font-semibold text-allgood-dark-cyan group-hover:text-allgood-burnt-orange transition-colors duration-300">Jolene's Lemonade Challenge: Entrepreneur to Empire</h3>
                                                 <p class="text-allgood-dark-cyan mt-2 text-sm flex-grow">Test your <span class="font-bold">entrepreneurial grit</span> by guiding Jolene through real-world business challenges, from managing finances to scaling her product.</p>
                                             </div>
+                                            <!-- Full Content View (Hidden by default) -->
                                             <div class="course-content-full">
                                                 <button class="close-card-button absolute top-2 right-2 text-allgood-light-cyan hover:text-allgood-dark-cyan" title="Close">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
@@ -236,6 +259,7 @@
                                                     </ul>
                                                     <div class="mt-6 pt-4 border-t border-gray-200">
                                                         <div class="flex justify-center space-x-4">
+                                                            <!-- Updated button styling and text -->
                                                             <button class="launch-course-button bg-allgood-burnt-orange text-white font-bold py-2 px-4 rounded-lg hover:bg-allgood-light-orange transition-colors duration-300 shadow-md text-xs">Launch Challenge</button> 
                                                             <button class="exit-button bg-transparent hover:bg-allgood-dark-cyan text-allgood-dark-cyan hover:text-white border border-allgood-dark-cyan font-bold py-2 px-4 rounded-lg text-xs transition-colors duration-300">Exit</button>
                                                         </div>
@@ -249,6 +273,7 @@
                         </div>
                     </div>
                     
+                    <!-- Collapsible Section 2: Digital Citizenship (Open by default - FIXED) -->
                     <div class="collapsible-section bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden open">
                         <button class="collapsible-header w-full flex justify-between items-center p-6 sm:p-8 text-left">
                             <h2 class="font-literata text-xl sm:text-2xl font-bold text-allgood-dark-cyan">Digital Citizenship</h2>
@@ -257,14 +282,18 @@
                         <div class="collapsible-content">
                             <div class="px-6 sm:px-8 pb-8 pt-0">
                                 <div class="border-t border-gray-200 pt-6">
+                                    <!-- Grid updated for 3 columns on large screens -->
                                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                        <!-- Game Tile 3: Digital Decisions CHALLENGE (Updated Style) -->
                                         <div class="course-tile-link group bg-white rounded-xl shadow-lg border-t-8 border-allgood-burnt-orange transition-all duration-300 flex flex-col overflow-hidden text-center cursor-pointer" data-course-url="https://theallgoodacademy.s3.us-east-2.amazonaws.com/Digital+Decisions/index.html" data-game-id="digital-decisions">
                                             <div class="p-4 flex flex-col flex-grow course-content-short">
+                                                <!-- THUMBNAIL ADDED HERE -->
                                                 <img src="https://theallgoodacademy.s3.us-east-2.amazonaws.com/images/thumbnail.digital_decisions_challenge.png" alt="Thumbnail for Digital Decisions Challenge game" class="w-3/4 h-auto rounded-md mb-3 border border-gray-100 mx-auto">
                                                 
                                                 <h3 class="font-literata text-lg font-semibold text-allgood-dark-cyan group-hover:text-allgood-burnt-orange transition-colors duration-300">Digital Decisions Challenge: Managing Your Online Footprint</h3>
                                                 <p class="text-allgood-dark-cyan mt-2 text-sm flex-grow">Test your <strong>digital citizenship and social skills</strong> by navigating 30 real-world scenarios. Learn to protect your privacy, combat misinformation, and communicate ethically online.</p>
                                             </div>
+                                            <!-- Full Content View (Hidden by default) -->
                                             <div class="course-content-full">
                                                 <button class="close-card-button absolute top-2 right-2 text-allgood-light-cyan hover:text-allgood-dark-cyan" title="Close">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
@@ -284,6 +313,7 @@
                                                     </ul>
                                                     <div class="mt-6 pt-4 border-t border-gray-200">
                                                         <div class="flex justify-center space-x-4">
+                                                            <!-- Updated button styling and text -->
                                                             <button class="launch-course-button bg-allgood-burnt-orange text-white font-bold py-2 px-4 rounded-lg hover:bg-allgood-light-orange transition-colors duration-300 shadow-md text-xs">Launch Challenge</button>
                                                             <button class="exit-button bg-transparent hover:bg-allgood-dark-cyan text-allgood-dark-cyan hover:text-white border border-allgood-dark-cyan font-bold py-2 px-4 rounded-lg text-xs transition-colors duration-300">Exit</button>
                                                         </div>
@@ -292,13 +322,16 @@
                                             </div>
                                         </div>
                                         
+                                        <!-- Game Tile 4: CONFLICT RESOLUTION CHALLENGE (Updated Style) -->
                                         <div class="course-tile-link group bg-white rounded-xl shadow-lg border-t-8 border-allgood-burnt-orange transition-all duration-300 flex flex-col overflow-hidden text-center cursor-pointer" data-course-url="https://theallgoodacademy.s3.us-east-2.amazonaws.com/Conflict+Resolution/index.html" data-game-id="conflict-resolution">
                                             <div class="p-4 flex flex-col flex-grow course-content-short">
+                                                <!-- THUMBNAIL ADDED HERE -->
                                                 <img src="https://theallgoodacademy.s3.us-east-2.amazonaws.com/images/thumbnail_conflict_resolution_challenge.png" alt="Thumbnail for Conflict Resolution Challenge game" class="w-3/4 h-auto rounded-md mb-3 border border-gray-100 mx-auto">
                                                 
                                                 <h3 class="font-literata text-lg font-semibold text-allgood-dark-cyan group-hover:text-allgood-burnt-orange transition-colors duration-300">Conflict Resolution Challenge: Navigating Disagreement</h3>
                                                 <p class="text-allgood-dark-cyan mt-2 text-sm flex-grow">Master <strong>high-stakes communication</strong> by using empathy and assertive language to mediate disagreements, set boundaries, and turn everyday friction into <strong>positive collaboration</strong> in both digital and real-world settings.</p>
                                             </div>
+                                            <!-- Full Content View (Hidden by default) -->
                                             <div class="course-content-full">
                                                 <button class="close-card-button absolute top-2 right-2 text-allgood-light-cyan hover:text-allgood-dark-cyan" title="Close">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
@@ -317,6 +350,7 @@
                                                     </ul>
                                                     <div class="mt-6 pt-4 border-t border-gray-200">
                                                         <div class="flex justify-center space-x-4">
+                                                            <!-- Updated button styling and text -->
                                                             <button class="launch-course-button bg-allgood-burnt-orange text-white font-bold py-2 px-4 rounded-lg hover:bg-allgood-light-orange transition-colors duration-300 shadow-md text-xs">Launch Challenge</button>
                                                             <button class="exit-button bg-transparent hover:bg-allgood-dark-cyan text-allgood-dark-cyan hover:text-white border border-allgood-dark-cyan font-bold py-2 px-4 rounded-lg text-xs transition-colors duration-300">Exit</button>
                                                         </div>
@@ -325,13 +359,16 @@
                                             </div>
                                         </div>
 
+                                        <!-- Game Tile 5: PURPOSEFUL COMMUNICATOR CHALLENGE (Updated Style) -->
                                         <div class="course-tile-link group bg-white rounded-xl shadow-lg border-t-8 border-allgood-burnt-orange transition-all duration-300 flex flex-col overflow-hidden text-center cursor-pointer" data-course-url="https://theallgoodacademy.s3.us-east-2.amazonaws.com/purposeful+communicator/index.html" data-game-id="purposeful-communicator">
                                             <div class="p-4 flex flex-col flex-grow course-content-short">
+                                                <!-- THUMBNAIL ADDED HERE -->
                                                 <img src="https://theallgoodacademy.s3.us-east-2.amazonaws.com/images/thumbnail_purposeful_communicator_challenge.png" alt="Thumbnail for Purposeful Communicator Challenge game" class="w-3/4 h-auto rounded-md mb-3 border border-gray-100 mx-auto">
                                                 
                                                 <h3 class="font-literata text-lg font-semibold text-allgood-dark-cyan group-hover:text-allgood-burnt-orange transition-colors duration-300">Purposeful Communicator Challenge: Master Your Message</h3>
                                                 <p class="text-allgood-dark-cyan mt-2 text-sm flex-grow">Master the art of <strong>positive influence</strong> and <strong>clear communication</strong>. Learn to craft messages, give constructive feedback, and lead digital conversations with purpose and empathy.</p>
                                             </div>
+                                            <!-- Full Content View (Hidden by default) -->
                                             <div class="course-content-full">
                                                 <button class="close-card-button absolute top-2 right-2 text-allgood-light-cyan hover:text-allgood-dark-cyan" title="Close">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
@@ -351,6 +388,7 @@
                                                     </ul>
                                                     <div class="mt-6 pt-4 border-t border-gray-200">
                                                         <div class="flex justify-center space-x-4">
+                                                            <!-- Updated button styling and text -->
                                                             <button class="launch-course-button bg-allgood-burnt-orange text-white font-bold py-2 px-4 rounded-lg hover:bg-allgood-light-orange transition-colors duration-300 shadow-md text-xs">Launch Challenge</button>
                                                             <button class="exit-button bg-transparent hover:bg-allgood-dark-cyan text-allgood-dark-cyan hover:text-white border border-allgood-dark-cyan font-bold py-2 px-4 rounded-lg text-xs transition-colors duration-300">Exit</button>
                                                         </div>
@@ -369,6 +407,7 @@
         </main>
     </div>
 
+    <!-- Footer -->
     <footer class="bg-white mt-16 border-t">
         <div class="container mx-auto px-6 py-8 flex justify-between items-center text-gray-500">
             <a href="privacy.html" class="hover:text-allgood-light-cyan transition-colors duration-300">Privacy Policy</a>
@@ -376,18 +415,22 @@
         </div>
     </footer>
 
+    <!-- Course Iframe View -->
     <div id="course-view" style="display: none;">
         <div class="bg-white text-center py-4 border-b">
              <p class="text-allgood-burnt-orange font-inter text-xs">Get your badge! Answer all of the questions correctly to receive a personalized badge.</p>
         </div>
+        <!-- IMPORTANT: iframe height is no longer fixed in CSS, relying on browser's native scrolling -->
         <iframe id="course-iframe" class="w-full h-[calc(100vh-116px)]" frameborder="0" allowfullscreen></iframe>
     </div>
 
+    <!-- SVG for the progress circle gradient -->
     <svg width="0" height="0" class="absolute">
         <defs>
             <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" style="stop-color:rgb(53,120,137);stop-opacity:1" /> 
-                <stop offset="100%" style="stop-color:rgb(211,71,22);stop-opacity:1" />
+                <!-- Gradient from Light Cyan to Burnt Orange -->
+                <stop offset="0%" style="stop-color:rgb(10,147,150);stop-opacity:1" /> 
+                <stop offset="100%" style="stop-color:rgb(231,111,81);stop-opacity:1" />
             </linearGradient>
         </defs>
     </svg>
