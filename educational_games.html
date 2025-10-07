@@ -455,10 +455,10 @@
             if (footer) footer.style.display = 'none';
             courseView.style.display = 'block';
 
-            // Use pushState to update the URL for sharing/tracking
-            const newUrlPath = `educational_games.html#game/${gameId}`;
-            if (window.location.hash !== `#game/${gameId}`) {
-                history.pushState({ gameId: gameId }, '', newUrlPath);
+            // FIX: Only push the hash part to history to avoid SecurityError related to path manipulation
+            const newHash = `#game/${gameId}`;
+            if (window.location.hash !== newHash) {
+                history.pushState({ gameId: gameId }, '', newHash);
             }
         }
         
@@ -471,8 +471,10 @@
             if (footer) footer.style.display = 'block';
             courseView.style.display = 'none';
             
-            // Clear the URL hash when showing the catalog
-            history.pushState({}, '', 'educational_games.html'); 
+            // FIX: Safely clear the hash using window.location.hash to avoid SecurityError
+            if (window.location.hash !== '') {
+                 window.location.hash = '';
+            }
         }
         
         document.addEventListener('DOMContentLoaded', function () {
