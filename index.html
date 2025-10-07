@@ -200,56 +200,40 @@
                 <!-- Navigation Links on the right -->
                 <div id="main-nav" class="flex items-center space-x-2 sm:space-x-4 md:space-x-6">
                     
-                    <!-- Home Dropdown (ACTIVE) -->
+                    <!-- Home Dropdown (ACTIVE) - Now a link that triggers a dropdown for Contact Us -->
                     <div class="relative group">
-                        <button class="nav-link active-nav-link transition duration-300 px-3 py-2 text-sm sm:text-lg font-literata font-bold whitespace-nowrap flex items-center focus:outline-none">
+                        <!-- Main Home Link (retains dropdown functionality) -->
+                        <a href="index.html" class="nav-link active-nav-link transition duration-300 px-3 py-2 text-sm sm:text-lg font-literata font-bold whitespace-nowrap flex items-center focus:outline-none">
                             <span>Home</span>
                             <svg class="w-4 h-4 ml-1 transform group-hover:rotate-180 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                             </svg>
-                        </button>
+                        </a>
+                        <!-- Dropdown Content: Only Contact Us -->
                         <div class="absolute left-0 w-40 bg-white rounded-md shadow-lg py-1 z-50 hidden group-hover:block">
-                            <a href="index.html" class="block px-4 py-2 text-sm text-allgood-dark-cyan hover:bg-gray-100 hover:text-allgood-light-cyan transition-colors duration-200 font-bold">Homepage</a>
                             <a href="https://docs.google.com/forms/d/e/1FAIpQLSfjNWmNtwQkiLHJ7PPcg9DGxsd2NwIEKR9Bd4WCr9t_7uxQeg/viewform?usp=sharing&ouid=111274516858833862718" target="_blank" class="block px-4 py-2 text-sm text-allgood-dark-cyan hover:bg-gray-100 hover:text-allgood-light-cyan transition-colors duration-200">Contact Us</a>
                         </div>
                     </div>
                     <!-- END Home Dropdown -->
 
-                    <!-- Educational Games (NOW A DIRECT LINK) -->
+                    <!-- Educational Games (Remains a direct link) -->
                     <a href="educational_games.html" class="nav-link text-allgood-dark-cyan hover:text-allgood-light-cyan transition duration-300 px-3 py-2 text-sm sm:text-lg font-literata font-bold whitespace-nowrap">Educational Games</a>
 
-                    <!-- Self Paced Courses Dropdown (Remains the same) -->
-                    <div class="relative group">
-                        <button class="nav-link text-allgood-dark-cyan hover:text-allgood-light-cyan transition duration-300 px-3 py-2 text-sm sm:text-lg font-literata font-bold whitespace-nowrap flex items-center focus:outline-none">
-                            <span>Self Paced Courses</span>
-                            <svg class="w-4 h-4 ml-1 transform group-hover:rotate-180 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                            </svg>
-                        </button>
-                        <div class="absolute right-0 w-56 bg-white rounded-md shadow-lg py-1 z-50 hidden group-hover:block">
-                            <a href="#" class="block px-4 py-2 text-sm text-allgood-dark-cyan hover:bg-gray-100 hover:hover:text-allgood-light-cyan transition-colors duration-200">Intro to Data Science</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-allgood-dark-cyan hover:bg-gray-100 hover:hover:text-allgood-light-cyan transition-colors duration-200">Creative Writing Workshop</a>
-                        </div>
-                    </div>
+                    <!-- Self Paced Courses (NOW A DIRECT LINK - NO DROPDOWN) -->
+                    <a href="#" class="nav-link text-allgood-dark-cyan hover:text-allgood-light-cyan transition duration-300 px-3 py-2 text-sm sm:text-lg font-literata font-bold whitespace-nowrap">
+                        Self Paced Courses
+                    </a>
                     
-                    <!-- Allgood Academy Plus (Remains a direct link) -->
-                    <a href="allgood-academy-plus.html" class="nav-link text-allgood-dark-cyan hover:text-allgood-light-cyan transition duration-300 px-3 py-2 text-sm sm:text-lg font-literata font-bold whitespace-nowrap">Allgood Academy <span class="plus-text">Plus</span></a>
-
-                    <!-- Dropdown Menu: Academy Resources (Remains the same) -->
+                    <!-- Dropdown Menu: Other Allgood Things (Now only Blog) -->
                     <div class="relative group">
                         <button class="nav-link text-allgood-dark-cyan hover:text-allgood-light-cyan transition duration-300 px-3 py-2 text-sm sm:text-lg font-literata font-bold whitespace-nowrap flex items-center focus:outline-none">
-                            <span>Academy Resources</span>
+                            <span>Other Allgood Things</span>
                             <svg class="w-4 h-4 ml-1 transform group-hover:rotate-180 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                             </svg>
                         </button>
                         <div class="absolute right-0 w-56 bg-white rounded-md shadow-lg py-1 z-50 hidden group-hover:block">
-                            <a href="champion-guides.html" class="block px-4 py-2 text-sm text-allgood-dark-cyan hover:bg-gray-100 hover:text-allgood-light-cyan transition-colors duration-200">Champion Guides</a>
-                            <a href="alice-kb.html" class="block px-4 py-2 text-sm text-allgood-dark-cyan hover:bg-gray-100 hover:text-allgood-light-cyan transition-colors duration-200">Product 1 Knowledge Base</a>
-                            <a href="he-kb.html" class="block px-4 py-2 text-sm text-allgood-dark-cyan hover:bg-gray-100 hover:text-allgood-light-cyan transition-colors duration-200">Product 2 Knowledge Base</a>
-                            <a href="ps-kb.html" class="block px-4 py-2 text-sm text-allgood-dark-cyan hover:bg-gray-100 hover:text-allgood-light-cyan transition-colors duration-200">Product 3 Knowledge Base</a>
-                            <a href="tr-kb.html" class="block px-4 py-2 text-sm text-allgood-dark-cyan hover:bg-gray-100 hover:text-allgood-light-cyan transition-colors duration-200">Product 4 Knowledge Base</a>
-                            <a href="blog.html" class="block px-4 py-2 text-sm text-allgood-dark-cyan hover:bg-gray-100 hover:text-allgood-light-cyan transition-colors duration-200">Blog</a>
+                            <a href="https://medium.com/@allgoodacademy" target="_blank" rel="noopener noreferrer" class="block px-4 py-2 text-sm text-allgood-dark-cyan hover:bg-gray-100 hover:text-allgood-light-cyan transition-colors duration-200">Blog</a>
                         </div>
                     </div>
                 </div>
