@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Allgood Academy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Literata:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Libraries for interactive hero -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+    <style>
+        /* Ensures all images are responsive */
+        img {
+          max-width: 100%;
+          height: auto;
+        }
+        /* Style for the active navigation link */
+        .active-nav-link {
+            font-weight: 600;
+            color: #0A9396; /* allgood-light-cyan */
+            text-decoration: underline;
+            text-decoration-color: #0A9396;
+            text-decoration-thickness: 2px;
+            text-underline-offset: 6px;
+        }
+        /* Ensure iframe takes up remaining height */
+        #course-view iframe {
+            height: calc(100vh - 116px); /* Adjust based on header (68px) + banner (~48px) height */
+        }
+        /* Styles for collapsible sections */
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+        .collapsible-section.open .collapsible-content {
+            max-height: 2000px; /* Large enough to fit content */
+        }
+        .collapsible-section.open .collapsible-arrow {
+            transform: rotate(180deg);
+            color: #E76F51; /* Change color to burnt orange when open */
+        }
+        .plus-text {
+            color: #E76F51; /* Burnt Orange */
+        }
+        .nav-link:hover .plus-text, .active-nav-link .plus-text {
+            color: #0A9396; /* Light Cyan */
+        }
+        /* New CSS for the dynamic pop-out effect */
+        .pop-out-effect {
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            cursor: pointer; /* Add pointer to show it's clickable */
+        }
+        .pop-out-effect:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 12px 20px 8px rgba(231, 111, 81, 0.4); /* Burnt Orange Shadow */
+        }
+        
+        /* New CSS for dynamic course tile hover effect */
+        .course-tile-link {
+            position: relative;
+            z-index: 10;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            width: 100%; /* Default width for the grid */
+        }
+        
+        /* FIX: Prevents hover effect from conflicting with expanded state */
+        .course-tile-link:not(.expanded):hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 12px 20px 8px rgba(231, 111, 81, 0.4); /* Burnt Orange Shadow */
+        }
+
+        .course-tile-link.expanded {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 50;
+            box-shadow: 0 12px 20px 8px rgba(0, 0, 0, 0.4);
+            border-color: #E76F51; /* Burnt Orange Border */
+            max-width: 600px; /* Dynamic width */
+            width: auto;
+            min-width: 320px; /* Added a minimum width */
+            height: auto;
+            background-color: white;
+            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.3s ease-in-out;
+        }
+
+        /* FIX: Hide the short content when expanded */
+        .course-tile-link.expanded .course-content-short {
+            display: none;
+        }
+
+        /* FIX: Show the full content when expanded */
+        .course-tile-link.expanded .course-content-full {
+            display: block;
+        }
+        
+        /* FIX: Hide full content by default and set its properties */
+        .course-content-full {
+            display: none;
+            padding: 2rem;
+            max-height: 80vh; /* For very long content */
+            overflow-y: auto; /* For very long content */
+        }
+        .course-content-full ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+        }
+        
+        .progress-circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 30;
+        }
+        .progress-circle.active {
+            opacity: 1;
+        }
+        .progress-ring {
+            stroke: url(#gradient);
+            transition: stroke-dasharray 0.60s linear;
+        }
+        @keyframes fill-up {
+            from {
+                stroke-dasharray: 0, 314.159;
+            }
+            to {
+                stroke-dasharray: 314.159, 314.159;
+            }
+        }
+        .progress-circle.active .progress-ring {
+            animation: fill-up 0.60s linear forwards;
+        }
+        /* FIX: Ensures the progress circle is completely hidden when the card expands */
+        .course-tile-link.expanded .progress-circle {
+            display: none;
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 40;
+            display: none;
+            cursor: pointer;
+        }
+        .modal-overlay.active {
+            display: block;
+        }
+        .close-card-button {
+            z-index: 60;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                        'literata': ['Literata', 'serif'],
+                    },
+                    // Allgood Academy Brand Colors
+                    colors: {
+                        'allgood-dark-cyan': '#005F73',
+                        'allgood-light-cyan': '#0A9396',
+                        'allgood-burnt-orange': '#E76F51',
+                        'allgood-light-orange': '#F4A261',
+                    },
+                    fontSize: {
+                        'xxs': ['0.6rem', { lineHeight: '0.9rem' }],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-allgood-dark-cyan text-gray-800 font-inter">
+
+    <!-- Header and Navigation -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="px-8 py-4">
+            <div class="container mx-auto flex items-center justify-between">
+                <!-- Logo on the left (Allgood Academy Image Logo) -->
+                <a href="index.html" class="cursor-pointer">
+                    <img src="https://i.ibb.co/ynkwWGhF/New-Transparent-Logo-1.png" alt="Allgood Academy Logo" class="h-12 w-auto">
+                </a>
+                
+                <!-- Navigation Links on the right -->
+                <div id="main-nav" class="flex items-center space-x-2 sm:space-x-4 md:space-x-6">
+                    
+                    <!-- Home Dropdown (NEW) -->
+                    <div class="relative group">
+                        <button class="nav-link active-nav-link transition duration-300 px-3 py-2 text-sm sm:text-lg font-literata font-bold whitespace-nowrap flex items-center focus:outline-none">
+                            <span>Home</span>
+                            <svg class="w-4 h-4 ml-1 transform group-hover:rotate-180 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                            </svg>
+                        </button>
+                        <div class="absolute left-0 w-40 bg-white rounded-md shadow-lg py-1 z-50 hidden group-hover:block">
+                            <a href="index.html" class="block px-4 py-2 text-sm text-allgood-dark-cyan hover:bg-gray-100 hover:text-allgood-light-cyan transition-colors duration-200 font-bold">Homepage</a>
+                            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfjNWmNtwQkiLHJ7PPcg9DGxsd2NwIEKR9Bd4WCr9t_7uxQeg/viewform?usp=sharing&ouid=111274516858833862718" target="_blank" class="block px-4 py-2 text-sm text-allgood-dark-cyan hover:bg-gray-100 hover:text-allgood-light-cyan transition-colors duration-200">Contact Us</a>
+                        </div>
+                    </div>
+                    <!-- END Home Dropdown -->
+
+                    <!-- Educational Games Dropdown (Updated to link to the new file) -->
+                    <div class="relative group">
+                        <button class="nav-link text-allgood-dark-cyan hover:text-allgood-light-cyan transition duration-300 px-3 py-2 text-sm sm:text-lg font-literata font-bold whitespace-nowrap flex items-center focus:outline-none">
+                            <span>Educational Games</span>
+                            <svg class="w-4 h-4 ml-1 transform group-hover:rotate-180 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                            </svg>
+                        </button>
+                        <div class="absolute right-0 w-56 bg-white rounded-md shadow-lg py-1 z-50 hidden group-hover:block">
+                            <!-- Link to the dedicated Educational Games page, removing nested links -->
+                            <a href="educational_games.html" class="block px-4 py-2 text-sm text-allgood-dark-cyan hover:bg-gray-100 hover:text-allgood-light-cyan transition-colors duration-200 font-bold">View All Games</a>
+                        </div>
+                    </div>
+
+                    <!-- Self Paced Courses Dropdown (Formerly Product 2) -->
+                    <div class="relative group">
+                        <button class="nav-link text-allgood-dark-cyan hover:text-allgood-light-cyan transition duration-300 px-3 py-2 text-sm sm:text-lg font-literata font-bold whitespace-nowrap flex items-center focus:outline-none">
+                            <span>Self Paced Courses</span>
+                            <svg class="w-4 h-4 ml-1 transform group-hover:rotate-180 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                            </svg>
+                        </button>
+                        <div class="absolute right-0 w-56 bg-white rounded-md shadow-lg py-1 z-50 hidden group-hover:block">
+                            <a href="#" class="block px-4 py-2 text-sm text-allgood-dark-cyan hover:bg-gray-100 hover:hover:text-allgood-light-cyan transition-colors duration-200">Intro to Data Science</a>
+                            <a href="#" class="block px-4 py-2 text-sm text-allgood-dark-cyan hover:bg-gray-100 hover:hover:text-allgood-light-cyan transition-colors duration-200">Creative Writing Workshop</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Allgood Academy Plus (Remains a direct link) -->
+                    <a href="allgood-academy-plus.html" class="nav-link text-allgood-dark-cyan hover:text-allgood-light-cyan transition duration-300 px-3 py-2 text-sm sm:text-lg font-literata font-bold whitespace-nowrap">Allgood Academy <span class="plus-text">Plus</span></a>
+
+                    <!-- Dropdown Menu: Academy Resources (Existing functionality maintained) -->
+                    <div class="relative group">
+                        <button class="nav-link text-allgood-dark-cyan hover:text-allgood-light-cyan transition duration-300 px-3 py-2 text-sm sm:text-lg font-literata font-bold whitespace-nowrap flex items-center focus:outline-none">
+                            <span>Academy Resources</span>
+                            <svg class="w-4 h-4 ml-1 transform group-hover:rotate-180 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                            </svg>
+                        </button>
+                        <div class="absolute right-0 w-56 bg-white rounded-md shadow-lg py-1 z-50 hidden group-hover:block">
+                            <a href="champion-guides.html" class="block px-4 py-2 text-sm text-allgood-dark-cyan hover:bg-gray-100 hover:text-allgood-light-cyan transition-colors duration-200">Champion Guides</a>
+                            <a href="alice-kb.html" class="block px-4 py-2 text-sm text-allgood-dark-cyan hover:bg-gray-100 hover:text-allgood-light-cyan transition-colors duration-200">Product 1 Knowledge Base</a>
+                            <a href="he-kb.html" class="block px-4 py-2 text-sm text-allgood-dark-cyan hover:bg-gray-100 hover:text-allgood-light-cyan transition-colors duration-200">Product 2 Knowledge Base</a>
+                            <a href="ps-kb.html" class="block px-4 py-2 text-sm text-allgood-dark-cyan hover:bg-gray-100 hover:text-allgood-light-cyan transition-colors duration-200">Product 3 Knowledge Base</a>
+                            <a href="tr-kb.html" class="block px-4 py-2 text-sm text-allgood-dark-cyan hover:bg-gray-100 hover:text-allgood-light-cyan transition-colors duration-200">Product 4 Knowledge Base</a>
+                            <a href="blog.html" class="block px-4 py-2 text-sm text-allgood-dark-cyan hover:bg-gray-100 hover:text-allgood-light-cyan transition-colors duration-200">Blog</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    <!-- Modal overlay -->
+    <div id="modal-overlay" class="modal-overlay"></div>
+
+    <!-- Page Content Wrapper -->
+    <div id="page-content">
+        <main id="home" class="page container mx-auto px-6 py-12">
+            <!-- This is the container that controls the width. Changed from max-w-4xl to max-w-2xl -->
+            <div class="max-w-2xl mx-auto">
+
+                <!-- Welcome Section (Hero Block) - Now contains the interactive image and has a white background -->
+                <section id="hero-block" class="text-center mb-16 p-8 rounded-xl border border-gray-200 pop-out-effect bg-white">
+                    <!-- Updated to use the new Horizontal Logo image and adjusted the container width -->
+                    <div class="h-auto max-w-lg mx-auto p-2">
+                        <img src="https://i.ibb.co/3yvdN59b/Horizontal-Logo.png" alt="Horizontal Logo Allgood Academy" class="h-auto w-auto max-w-full mx-auto max-h-40">
+                    </div>
+                </section>
+
+                <!-- NEW: Pragmatism Definition Banner -->
+                <section id="banner-definition" class="mb-8 rounded-xl overflow-hidden shadow-xl">
+                    <img src="https://i.ibb.co/m5JWgHdq/Pragmatism-Definition-With-Logo.png" alt="Pragmatism Definition With Logo" class="w-full h-auto">
+                </section>
+                <!-- END NEW BANNER -->
+
+                <!-- About Section (Updated) - ADDED mb-10 FOR SPACING -->
+                <section class="bg-white p-8 rounded-xl shadow-sm border border-gray-200 mb-10">
+                    <h2 class="font-literata text-center text-2xl font-bold text-allgood-dark-cyan mb-4">
+                        <span class="text-allgood-burnt-orange">Welcome to the</span> Allgood Academy
+                    </h2>
+                    <p class="text-gray-600 leading-relaxed text-center">
+                        We're on a mission to turn <span class="text-allgood-light-cyan font-semibold">passive learning</span> into <span class="text-allgood-burnt-orange font-semibold">pragmatic action</span>. Our digital experiences, from interactive games to microlearning courses, are designed to help you bridge the gap between knowing and doing.
+                    </p>
+                </section>
+                
+                <!-- Content Blocks Wrapper -->
+                <div class="space-y-10">
+                    
+                    <!-- Join the Community Section (UPDATED) -->
+                    <section class="bg-white p-8 rounded-xl shadow-sm border border-gray-200">
+                        <h2 class="font-literata text-2xl font-bold text-allgood-burnt-orange mb-4">Join the Community</h2>
+                        <p class="text-gray-600 leading-relaxed">
+                            Our journey to purposeful action starts here. Join our community to get exclusive content and updates. We're here to help you grow.
+                        </p>
+                        <div class="mt-6 border-t border-gray-200 pt-6 text-center">
+                            <!-- Updated button text and link to match the new community focus -->
+                            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfjNWmNtwQkiLHJ7PPcg9DGxsd2NwIEKR9Bd4WCr9t_7uxQeg/viewform?usp=sharing&ouid=111274516858833862718" target="_blank" rel="noopener noreferrer" class="inline-block bg-allgood-light-cyan text-white font-bold py-3 px-8 rounded-lg hover:bg-allgood-dark-cyan transition-colors duration-300 shadow-md">
+                                Join the Community
+                            </a>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white mt-16 border-t">
+        <div class="container mx-auto px-6 py-8 flex justify-between items-center text-gray-500">
+            <a href="privacy.html" class="hover:text-allgood-light-cyan transition-colors duration-300">Privacy Policy</a>
+            <p>Copyright © 2025, Allgood</p>
+        </div>
+    </footer>
+
+    <!-- Course Iframe View -->
+    <div id="course-view" style="display: none;">
+        <div class="bg-white text-center py-4 border-b">
+             <p class="text-allgood-burnt-orange font-inter text-xs">To receive credit for this course, you <strong class="font-bold">must</strong> complete the certificate form at the end.</p>
+        </div>
+        <iframe id="course-iframe" class="w-full" frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <!-- SVG for the progress circle gradient -->
+    <svg width="0" height="0" class="absolute">
+        <defs>
+            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <!-- Gradient from Light Cyan to Burnt Orange -->
+                <stop offset="0%" style="stop-color:rgb(10,147,150);stop-opacity:1" /> 
+                <stop offset="100%" style="stop-color:rgb(231,111,81);stop-opacity:1" />
+            </linearGradient>
+        </defs>
+    </svg>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // These are the only variables needed now for page-level elements
+            const pageContent = document.getElementById('page-content');
+            const footer = document.querySelector('footer');
+            const courseView = document.getElementById('course-view');
+            const courseIframe = document.getElementById('course-iframe');
+            const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+            
+            // This function adds interactivity to the course tiles on the CURRENT page.
+            function getCourseTilesAndAddListeners() {
+                document.querySelectorAll('.course-tile-link').forEach(tile => {
+                    let hoverTimeout;
+                    
+                    const progressCircle = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                    progressCircle.setAttribute('class', 'progress-circle');
+                    progressCircle.setAttribute('viewBox', '0 0 100 100');
+                    progressCircle.innerHTML = '<circle cx="50" cy="50" r="45" fill="none" stroke="#ccc" stroke-width="10"></circle><circle class="progress-ring" cx="50" cy="50" r="45" fill="none" stroke-width="10" stroke-linecap="round"></circle>';
+                    tile.appendChild(progressCircle);
+                    
+                    const progressRing = progressCircle.querySelector('.progress-ring');
+                    const circumference = 2 * Math.PI * 45;
+                    progressRing.style.strokeDasharray = `${circumference} ${circumference}`;
+                    progressRing.style.strokeDashoffset = circumference;
+
+                    // --- HOVER LOGIC FOR DESKTOP ---
+                    if (!isTouchDevice) {
+                        tile.addEventListener('mouseenter', function() {
+                            hoverTimeout = setTimeout(() => {
+                                if (!tile.classList.contains('expanded')) {
+                                    tile.classList.add('expanded');
+                                    progressCircle.classList.remove('active');
+                                    document.getElementById('modal-overlay').classList.add('active');
+                                }
+                            }, 600);
+
+                            progressCircle.classList.add('active');
+                        });
+
+                        tile.addEventListener('mouseleave', function() {
+                             clearTimeout(hoverTimeout);
+                            if (!tile.classList.contains('expanded')) {
+                                progressCircle.classList.remove('active');
+                            }
+                        });
+                    }
+
+                    const closeButton = tile.querySelector('.close-card-button');
+                    if (closeButton) {
+                        closeButton.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            if (tile.classList.contains('expanded')) {
+                                tile.classList.remove('expanded');
+                                document.getElementById('modal-overlay').classList.remove('active');
+                                progressCircle.classList.remove('active');
+                            }
+                        });
+                    }
+
+                    const exitButton = tile.querySelector('.exit-button');
+                    if (exitButton) {
+                        exitButton.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                             if (tile.classList.contains('expanded')) {
+                                tile.classList.remove('expanded');
+                                document.getElementById('modal-overlay').classList.remove('active');
+                                progressCircle.classList.remove('active');
+                            }
+                        });
+                    }
+
+                    const launchButton = tile.querySelector('.launch-course-button');
+                    if (launchButton) {
+                        launchButton.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            const courseUrl = tile.dataset.courseUrl;
+                            
+                            if (tile.classList.contains('expanded')) {
+                                tile.classList.remove('expanded');
+                                document.getElementById('modal-overlay').classList.remove('active');
+                                progressCircle.classList.remove('active');
+                            }
+
+                            if (courseUrl) {
+                                courseIframe.src = courseUrl;
+                                pageContent.style.display = 'none';
+                                if (footer) footer.style.display = 'none';
+                                courseView.style.display = 'block';
+                            }
+                        });
+                    }
+                    
+                    document.getElementById('modal-overlay').addEventListener('click', function() {
+                         document.querySelectorAll('.course-tile-link.expanded').forEach(expandedTile => {
+                            expandedTile.classList.remove('expanded');
+                            document.getElementById('modal-overlay').classList.remove('active');
+                            expandedTile.querySelector('.progress-circle').classList.remove('active');
+                         });
+                    });
+
+                    tile.addEventListener('click', function(e) {
+                        // --- TAP-TO-REVEAL LOGIC FOR TOUCH DEVICES ---
+                        if (isTouchDevice && !tile.classList.contains('expanded')) {
+                            e.preventDefault(); // Stop link from firing on first tap
+
+                            // Close any other open cards first
+                            document.querySelectorAll('.course-tile-link.expanded').forEach(openTile => {
+                                if(openTile !== tile) {
+                                    openTile.classList.remove('expanded');
+                                }
+                            });
+                            
+                            // Now expand the tapped card
+                            tile.classList.add('expanded');
+                            document.getElementById('modal-overlay').classList.add('active');
+                            return; // End execution here for the first tap
+                        }
+
+                        // --- DEFAULT CLICK LOGIC FOR DESKTOP ---
+                        if (tile.classList.contains('expanded')) {
+                            e.stopPropagation();
+                            // Do nothing if it's already expanded, the buttons inside will handle it
+                            return;
+                        }
+                        
+                        const courseUrl = e.currentTarget.dataset.courseUrl;
+                        if (courseUrl) {
+                            courseIframe.src = courseUrl;
+                            pageContent.style.display = 'none';
+                            if (footer) footer.style.display = 'none';
+                            courseView.style.display = 'block';
+                        }
+                    });
+                });
+            }
+            
+            getCourseTilesAndAddListeners();
+
+            // --- Collapsible Section Logic ---
+            document.querySelectorAll('.collapsible-header').forEach(header => {
+                header.addEventListener('click', () => {
+                    const section = header.parentElement;
+                    section.classList.toggle('open');
+                });
+            });
+
+            // --- Interactive Hero Block Logic ---
+            const heroBlock = document.getElementById('hero-block');
+            if (heroBlock) {
+                // Create synths that can be reused for all sounds
+                const synth = new Tone.Synth().toDestination();
+
+                // Define the different sounds as an array of functions
+                const sounds = [
+                    () => { // 1. Bright Chime
+                        synth.triggerAttackRelease("C5", "8n");
+                    },
+                    () => { // 2. Lower, Softer Chime
+                        synth.triggerAttackRelease("G4", "8n");
+                    },
+                    () => { // 3. Quick, High-Pitched Sparkle
+                        synth.triggerAttackRelease("G5", "16n");
+                    },
+                    () => { // 4. Gentle Upward Melody
+                        const now = Tone.now();
+                        synth.triggerAttackRelease("C5", "16n", now);
+                        synth.triggerAttackRelease("E5", "16n", now + 0.1);
+                    }
+                ];
+
+                let soundIndex = 0; // To keep track of the current sound
+
+                heroBlock.addEventListener('click', () => {
+                    // Start audio context on the first user interaction
+                    Tone.start();
+
+                    // Trigger the confetti (using new colors: Light Cyan and Burnt Orange)
+                    confetti({
+                        particleCount: 100,
+                        spread: 70,
+                        origin: { y: 0.6 },
+                        colors: ['#0A9396', '#E76F51', '#F4A261']
+                    });
+
+                    // Play the current sound in the cycle
+                    sounds[soundIndex]();
+
+                    // Move to the next sound for the next click
+                    soundIndex = (soundIndex + 1) % sounds.length;
+                });
+            }
+
+
+            // --- Disable Right-Click ---
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+            });
+        });
+    </script>
+
+</body>
+</html>
