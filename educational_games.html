@@ -26,10 +26,9 @@
             text-decoration-thickness: 2px;
             text-underline-offset: 6px;
         }
-        /* Ensure iframe takes up remaining height */
-        #course-view iframe {
-            height: calc(100vh - 116px); /* Adjust based on header (68px) + banner (~48px) height */
-        }
+        /* ENSURE IFRAME IS FULL WIDTH, HEIGHT IS NOW HANDLED BY CONTENT FLOW AND BROWSER SCROLL */
+        /* #course-view iframe { height: calc(100vh - 116px); } - REMOVED FIXED HEIGHT */
+        
         /* Styles for collapsible sections */
         .collapsible-content {
             max-height: 0;
@@ -403,7 +402,8 @@
         <div class="bg-white text-center py-4 border-b">
              <p class="text-allgood-burnt-orange font-inter text-xs">Get your badge! Answer all of the questions correctly to receive a personalized badge.</p>
         </div>
-        <iframe id="course-iframe" class="w-full" frameborder="0" allowfullscreen></iframe>
+        <!-- IMPORTANT: iframe height is no longer fixed in CSS, relying on browser's native scrolling -->
+        <iframe id="course-iframe" class="w-full h-[calc(100vh-116px)]" frameborder="0" allowfullscreen></iframe>
     </div>
 
     <!-- SVG for the progress circle gradient -->
