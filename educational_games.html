@@ -49,28 +49,19 @@
         .nav-link:hover .plus-text, .active-nav-link .plus-text {
             color: #0A9396; /* Light Cyan */
         }
-        /* New CSS for the dynamic pop-out effect */
-        .pop-out-effect {
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-            cursor: pointer; /* Add pointer to show it's clickable */
-        }
-        .pop-out-effect:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 12px 20px 8px rgba(231, 111, 81, 0.4); /* Burnt Orange Shadow */
-        }
         
-        /* New CSS for dynamic course tile hover effect */
+        /* Base tile link style */
         .course-tile-link {
             position: relative;
             z-index: 10;
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            /* Keeps transition for expanded state, but hover effects are now minimal/gone */
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; 
             width: 100%; /* Default width for the grid */
         }
         
-        /* FIX: Prevents hover effect from conflicting with expanded state */
-        .course-tile-link:not(.expanded):hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 12px 20px 8px rgba(231, 111, 81, 0.4); /* Burnt Orange Shadow */
+        /* Minimal visual feedback on hover */
+        .course-tile-link:hover {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow to signal interactivity */
         }
 
         .course-tile-link.expanded {
@@ -89,17 +80,17 @@
             transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.3s ease-in-out;
         }
 
-        /* FIX: Hide the short content when expanded */
+        /* Hide the short content when expanded */
         .course-tile-link.expanded .course-content-short {
             display: none;
         }
 
-        /* FIX: Show the full content when expanded */
+        /* Show the full content when expanded */
         .course-tile-link.expanded .course-content-full {
             display: block;
         }
         
-        /* FIX: Hide full content by default and set its properties */
+        /* Hide full content by default and set its properties */
         .course-content-full {
             display: none;
             padding: 2rem;
@@ -111,39 +102,8 @@
             padding-left: 1.5rem;
         }
         
-        .progress-circle {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 50px;
-            height: 50px;
-            opacity: 0;
-            transition: opacity 0.3s;
-            z-index: 30;
-        }
-        .progress-circle.active {
-            opacity: 1;
-        }
-        .progress-ring {
-            stroke: url(#gradient);
-            transition: stroke-dasharray 0.60s linear;
-        }
-        @keyframes fill-up {
-            from {
-                stroke-dasharray: 0, 314.159;
-            }
-            to {
-                stroke-dasharray: 314.159, 314.159;
-            }
-        }
-        .progress-circle.active .progress-ring {
-            animation: fill-up 0.60s linear forwards;
-        }
-        /* FIX: Ensures the progress circle is completely hidden when the card expands */
-        .course-tile-link.expanded .progress-circle {
-            display: none;
-        }
+        /* Removed all .progress-circle and related CSS */
+
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -202,53 +162,38 @@
                     
                     <!-- Home Dropdown -->
                     <div class="relative group">
-                        <button class="nav-link text-allgood-dark-cyan hover:text-allgood-light-cyan transition duration-300 px-3 py-2 text-sm sm:text-lg font-literata font-bold whitespace-nowrap flex items-center focus:outline-none">
+                        <!-- Main Home Link (retains dropdown functionality) -->
+                        <a href="index.html" class="nav-link text-allgood-dark-cyan hover:text-allgood-light-cyan transition duration-300 px-3 py-2 text-sm sm:text-lg font-literata font-bold whitespace-nowrap flex items-center focus:outline-none">
                             <span>Home</span>
                             <svg class="w-4 h-4 ml-1 transform group-hover:rotate-180 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                             </svg>
-                        </button>
+                        </a>
+                        <!-- Dropdown Content: Only Contact Us -->
                         <div class="absolute left-0 w-40 bg-white rounded-md shadow-lg py-1 z-50 hidden group-hover:block">
-                            <a href="index.html" class="block px-4 py-2 text-sm text-allgood-dark-cyan hover:bg-gray-100 hover:text-allgood-light-cyan transition-colors duration-200 font-bold">Homepage</a>
                             <a href="https://docs.google.com/forms/d/e/1FAIpQLSfjNWmNtwQkiLHJ7PPcg9DGxsd2NwIEKR9Bd4WCr9t_7uxQeg/viewform?usp=sharing&ouid=111274516858833862718" target="_blank" class="block px-4 py-2 text-sm text-allgood-dark-cyan hover:bg-gray-100 hover:text-allgood-light-cyan transition-colors duration-200">Contact Us</a>
                         </div>
                     </div>
-                    <!-- Educational Games Link (ACTIVE) -->
+                    <!-- END Home Dropdown -->
+
+                    <!-- Educational Games (ACTIVE LINK) -->
                     <a href="educational_games.html" class="nav-link active-nav-link transition duration-300 px-3 py-2 text-sm sm:text-lg font-literata font-bold whitespace-nowrap">Educational Games</a>
 
-
-                    <!-- Self Paced Courses Dropdown -->
-                    <div class="relative group">
-                        <button class="nav-link text-allgood-dark-cyan hover:text-allgood-light-cyan transition duration-300 px-3 py-2 text-sm sm:text-lg font-literata font-bold whitespace-nowrap flex items-center focus:outline-none">
-                            <span>Self Paced Courses</span>
-                            <svg class="w-4 h-4 ml-1 transform group-hover:rotate-180 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                            </svg>
-                        </button>
-                        <div class="absolute right-0 w-56 bg-white rounded-md shadow-lg py-1 z-50 hidden group-hover:block">
-                            <a href="#" class="block px-4 py-2 text-sm text-allgood-dark-cyan hover:bg-gray-100 hover:hover:text-allgood-light-cyan transition-colors duration-200">Intro to Data Science</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-allgood-dark-cyan hover:bg-gray-100 hover:hover:text-allgood-light-cyan transition-colors duration-200">Creative Writing Workshop</a>
-                        </div>
-                    </div>
+                    <!-- Self Paced Courses (NOW A DIRECT LINK - NO DROPDOWN) -->
+                    <a href="#" class="nav-link text-allgood-dark-cyan hover:text-allgood-light-cyan transition duration-300 px-3 py-2 text-sm sm:text-lg font-literata font-bold whitespace-nowrap">
+                        Self Paced Courses
+                    </a>
                     
-                    <!-- Allgood Academy Plus -->
-                    <a href="allgood-academy-plus.html" class="nav-link text-allgood-dark-cyan hover:text-allgood-light-cyan transition duration-300 px-3 py-2 text-sm sm:text-lg font-literata font-bold whitespace-nowrap">Allgood Academy <span class="plus-text">Plus</span></a>
-
-                    <!-- Dropdown Menu: Academy Resources (Existing functionality maintained) -->
+                    <!-- Dropdown Menu: Other Allgood Things (Simplified) -->
                     <div class="relative group">
                         <button class="nav-link text-allgood-dark-cyan hover:text-allgood-light-cyan transition duration-300 px-3 py-2 text-sm sm:text-lg font-literata font-bold whitespace-nowrap flex items-center focus:outline-none">
-                            <span>Academy Resources</span>
+                            <span>Other Allgood Things</span>
                             <svg class="w-4 h-4 ml-1 transform group-hover:rotate-180 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                             </svg>
                         </button>
                         <div class="absolute right-0 w-56 bg-white rounded-md shadow-lg py-1 z-50 hidden group-hover:block">
-                            <a href="champion-guides.html" class="block px-4 py-2 text-sm text-allgood-dark-cyan hover:bg-gray-100 hover:text-allgood-light-cyan transition-colors duration-200">Champion Guides</a>
-                            <a href="alice-kb.html" class="block px-4 py-2 text-sm text-allgood-dark-cyan hover:bg-gray-100 hover:text-allgood-light-cyan transition-colors duration-200">Product 1 Knowledge Base</a>
-                            <a href="he-kb.html" class="block px-4 py-2 text-sm text-allgood-dark-cyan hover:bg-gray-100 hover:text-allgood-light-cyan transition-colors duration-200">Product 2 Knowledge Base</a>
-                            <a href="ps-kb.html" class="block px-4 py-2 text-sm text-allgood-dark-cyan hover:bg-gray-100 hover:text-allgood-light-cyan transition-colors duration-200">Product 3 Knowledge Base</a>
-                            <a href="tr-kb.html" class="block px-4 py-2 text-sm text-allgood-dark-cyan hover:bg-gray-100 hover:text-allgood-light-cyan transition-colors duration-200">Product 4 Knowledge Base</a>
-                            <a href="blog.html" class="block px-4 py-2 text-sm text-allgood-dark-cyan hover:bg-gray-100 hover:text-allgood-light-cyan transition-colors duration-200">Blog</a>
+                            <a href="https://medium.com/@allgoodacademy" target="_blank" rel="noopener noreferrer" class="block px-4 py-2 text-sm text-allgood-dark-cyan hover:bg-gray-100 hover:text-allgood-light-cyan transition-colors duration-200">Blog</a>
                         </div>
                     </div>
                 </div>
@@ -262,14 +207,15 @@
     <!-- Page Content Wrapper -->
     <div id="page-content">
         <main id="educational-games" class="page container mx-auto px-6 py-12">
-             <div class="max-w-4xl mx-auto">
+             <!-- Increased max-width to 6xl for 3-up layout -->
+             <div class="max-w-6xl mx-auto"> 
                 <section class="text-center mb-16">
                     <h1 class="font-literata text-4xl md:text-5xl font-bold text-white mb-6">
                         The <span class="text-allgood-burnt-orange">Educational Games</span> Catalog
                     </h1>
                 </section>
                 <div class="space-y-6">
-                    <!-- Collapsible Section 1: Entrepreneurial Mindset & Strategy (Renamed from Emotional Intelligence) -->
+                    <!-- Collapsible Section 1: Entrepreneurial Mindset & Strategy -->
                     <div class="collapsible-section bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden open">
                         <button class="collapsible-header w-full flex justify-between items-center p-6 sm:p-8 text-left">
                             <h2 class="font-literata text-xl sm:text-2xl font-bold text-allgood-dark-cyan">Entrepreneurial Mindset & Strategy</h2>
@@ -278,9 +224,10 @@
                         <div class="collapsible-content">
                             <div class="px-6 sm:px-8 pb-8 pt-0">
                                 <div class="border-t border-gray-200 pt-6">
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <!-- Game Tile 1: JOLENE'S LEMONADE CHALLENGE -->
-                                        <div class="course-tile-link group bg-gradient-to-br from-white via-blue-50 to-orange-50 rounded-lg border-2 border-transparent hover:border-allgood-burnt-orange transition-all duration-300 flex flex-col overflow-hidden text-center cursor-pointer" data-course-url="https://theallgoodacademy.s3.us-east-2.amazonaws.com/Jolene's+Lemonade+Stand/index.html.txt" data-game-id="jolene-lemonade">
+                                    <!-- Grid updated for 3 columns on large screens -->
+                                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"> 
+                                        <!-- Game Tile 1: JOLENE'S LEMONADE CHALLENGE (Updated Style) -->
+                                        <div class="course-tile-link group bg-white rounded-xl shadow-lg border-t-8 border-allgood-burnt-orange transition-all duration-300 flex flex-col overflow-hidden text-center cursor-pointer" data-course-url="https://theallgoodacademy.s3.us-east-2.amazonaws.com/Jolene's+Lemonade+Stand/index.html.txt" data-game-id="jolene-lemonade">
                                             <div class="p-4 flex flex-col flex-grow course-content-short">
                                                 <h3 class="font-literata text-lg font-semibold text-allgood-dark-cyan group-hover:text-allgood-burnt-orange transition-colors duration-300">Jolene's Lemonade Challenge: Entrepreneur to Empire</h3>
                                                 <p class="text-allgood-dark-cyan mt-2 text-sm flex-grow">Test your <span class="font-bold">entrepreneurial grit</span> by guiding Jolene through real-world business challenges, from managing finances to scaling her product.</p>
@@ -304,7 +251,8 @@
                                                     </ul>
                                                     <div class="mt-6 pt-4 border-t border-gray-200">
                                                         <div class="flex justify-center space-x-4">
-                                                            <button class="launch-course-button bg-allgood-light-cyan text-white font-bold py-2 px-4 rounded-lg hover:bg-allgood-dark-cyan transition-colors duration-300 shadow-md text-xs">Launch Game</button>
+                                                            <!-- Updated button styling and text -->
+                                                            <button class="launch-course-button bg-allgood-burnt-orange text-white font-bold py-2 px-4 rounded-lg hover:bg-allgood-light-orange transition-colors duration-300 shadow-md text-xs">Launch Challenge</button> 
                                                             <button class="exit-button bg-transparent hover:bg-allgood-dark-cyan text-allgood-dark-cyan hover:text-white border border-allgood-dark-cyan font-bold py-2 px-4 rounded-lg text-xs transition-colors duration-300">Exit</button>
                                                         </div>
                                                     </div>
@@ -326,11 +274,12 @@
                         <div class="collapsible-content">
                             <div class="px-6 sm:px-8 pb-8 pt-0">
                                 <div class="border-t border-gray-200 pt-6">
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <!-- Game Tile 3: Digital Decisions -->
-                                        <div class="course-tile-link group bg-gradient-to-br from-white via-blue-50 to-orange-50 rounded-lg border-2 border-transparent hover:border-allgood-burnt-orange transition-all duration-300 flex flex-col overflow-hidden text-center cursor-pointer" data-course-url="https://theallgoodacademy.s3.us-east-2.amazonaws.com/Digital+Decisions/index.html" data-game-id="digital-decisions">
+                                    <!-- Grid updated for 3 columns on large screens -->
+                                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                        <!-- Game Tile 3: Digital Decisions CHALLENGE (Updated Style) -->
+                                        <div class="course-tile-link group bg-white rounded-xl shadow-lg border-t-8 border-allgood-burnt-orange transition-all duration-300 flex flex-col overflow-hidden text-center cursor-pointer" data-course-url="https://theallgoodacademy.s3.us-east-2.amazonaws.com/Digital+Decisions/index.html" data-game-id="digital-decisions">
                                             <div class="p-4 flex flex-col flex-grow course-content-short">
-                                                <h3 class="font-literata text-lg font-semibold text-allgood-dark-cyan group-hover:text-allgood-burnt-orange transition-colors duration-300">Digital Decisions: Managing Your Online Footprint</h3>
+                                                <h3 class="font-literata text-lg font-semibold text-allgood-dark-cyan group-hover:text-allgood-burnt-orange transition-colors duration-300">Digital Decisions Challenge: Managing Your Online Footprint</h3>
                                                 <p class="text-allgood-dark-cyan mt-2 text-sm flex-grow">Test your <strong>digital citizenship and social skills</strong> by navigating 30 real-world scenarios. Learn to protect your privacy, combat misinformation, and communicate ethically online.</p>
                                             </div>
                                             <!-- Full Content View (Hidden by default) -->
@@ -341,7 +290,7 @@
                                                     </svg>
                                                 </button>
                                                 <div class="max-w-md w-full text-left">
-                                                    <h3 class="font-literata text-lg font-semibold text-allgood-dark-cyan mb-4">Digital Decisions: Managing Your Online Footprint</h3>
+                                                    <h3 class="font-literata text-lg font-semibold text-allgood-dark-cyan mb-4">Digital Decisions Challenge: Managing Your Online Footprint</h3>
                                                     <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mt-4">Game Description</h4>
                                                     <p class="text-allgood-dark-cyan mt-1 text-sm leading-relaxed mb-4">The Digital Decisions Challenge is an interactive training exercise that puts you in control of your online identity. You will face 30 realistic, high-stakes scenarios involving <strong>privacy, online communication, misinformation, and ethical dilemmas</strong>. Your choices are categorized by <strong>effectiveness</strong> to help you immediately see the impact of your actions and build a <strong>purpose-driven digital brand</strong>.</p>
                                                     <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mt-4">Learning Objectives</h4>
@@ -353,7 +302,8 @@
                                                     </ul>
                                                     <div class="mt-6 pt-4 border-t border-gray-200">
                                                         <div class="flex justify-center space-x-4">
-                                                            <button class="launch-course-button bg-allgood-light-cyan text-white font-bold py-2 px-4 rounded-lg hover:bg-allgood-dark-cyan transition-colors duration-300 shadow-md text-xs">Launch Game</button>
+                                                            <!-- Updated button styling and text -->
+                                                            <button class="launch-course-button bg-allgood-burnt-orange text-white font-bold py-2 px-4 rounded-lg hover:bg-allgood-light-orange transition-colors duration-300 shadow-md text-xs">Launch Challenge</button>
                                                             <button class="exit-button bg-transparent hover:bg-allgood-dark-cyan text-allgood-dark-cyan hover:text-white border border-allgood-dark-cyan font-bold py-2 px-4 rounded-lg text-xs transition-colors duration-300">Exit</button>
                                                         </div>
                                                     </div>
@@ -361,8 +311,8 @@
                                             </div>
                                         </div>
                                         
-                                        <!-- Game Tile 4: CONFLICT RESOLUTION CHALLENGE -->
-                                        <div class="course-tile-link group bg-gradient-to-br from-white via-blue-50 to-orange-50 rounded-lg border-2 border-transparent hover:border-allgood-burnt-orange transition-all duration-300 flex flex-col overflow-hidden text-center cursor-pointer" data-course-url="https://theallgoodacademy.s3.us-east-2.amazonaws.com/Conflict+Resolution/index.html" data-game-id="conflict-resolution">
+                                        <!-- Game Tile 4: CONFLICT RESOLUTION CHALLENGE (Updated Style) -->
+                                        <div class="course-tile-link group bg-white rounded-xl shadow-lg border-t-8 border-allgood-burnt-orange transition-all duration-300 flex flex-col overflow-hidden text-center cursor-pointer" data-course-url="https://theallgoodacademy.s3.us-east-2.amazonaws.com/Conflict+Resolution/index.html" data-game-id="conflict-resolution">
                                             <div class="p-4 flex flex-col flex-grow course-content-short">
                                                 <h3 class="font-literata text-lg font-semibold text-allgood-dark-cyan group-hover:text-allgood-burnt-orange transition-colors duration-300">Conflict Resolution Challenge: Navigating Disagreement</h3>
                                                 <p class="text-allgood-dark-cyan mt-2 text-sm flex-grow">Master <strong>high-stakes communication</strong> by using empathy and assertive language to mediate disagreements, set boundaries, and turn everyday friction into <strong>positive collaboration</strong> in both digital and real-world settings.</p>
@@ -386,7 +336,8 @@
                                                     </ul>
                                                     <div class="mt-6 pt-4 border-t border-gray-200">
                                                         <div class="flex justify-center space-x-4">
-                                                            <button class="launch-course-button bg-allgood-light-cyan text-white font-bold py-2 px-4 rounded-lg hover:bg-allgood-dark-cyan transition-colors duration-300 shadow-md text-xs">Launch Game</button>
+                                                            <!-- Updated button styling and text -->
+                                                            <button class="launch-course-button bg-allgood-burnt-orange text-white font-bold py-2 px-4 rounded-lg hover:bg-allgood-light-orange transition-colors duration-300 shadow-md text-xs">Launch Challenge</button>
                                                             <button class="exit-button bg-transparent hover:bg-allgood-dark-cyan text-allgood-dark-cyan hover:text-white border border-allgood-dark-cyan font-bold py-2 px-4 rounded-lg text-xs transition-colors duration-300">Exit</button>
                                                         </div>
                                                     </div>
@@ -394,10 +345,10 @@
                                             </div>
                                         </div>
 
-                                        <!-- Game Tile 5: PURPOSEFUL COMMUNICATOR -->
-                                        <div class="course-tile-link group bg-gradient-to-br from-white via-blue-50 to-orange-50 rounded-lg border-2 border-transparent hover:border-allgood-burnt-orange transition-all duration-300 flex flex-col overflow-hidden text-center cursor-pointer" data-course-url="https://theallgoodacademy.s3.us-east-2.amazonaws.com/purposeful+communicator/index.html" data-game-id="purposeful-communicator">
+                                        <!-- Game Tile 5: PURPOSEFUL COMMUNICATOR CHALLENGE (Updated Style) -->
+                                        <div class="course-tile-link group bg-white rounded-xl shadow-lg border-t-8 border-allgood-burnt-orange transition-all duration-300 flex flex-col overflow-hidden text-center cursor-pointer" data-course-url="https://theallgoodacademy.s3.us-east-2.amazonaws.com/purposeful+communicator/index.html" data-game-id="purposeful-communicator">
                                             <div class="p-4 flex flex-col flex-grow course-content-short">
-                                                <h3 class="font-literata text-lg font-semibold text-allgood-dark-cyan group-hover:text-allgood-burnt-orange transition-colors duration-300">Purposeful Communicator: Master Your Message</h3>
+                                                <h3 class="font-literata text-lg font-semibold text-allgood-dark-cyan group-hover:text-allgood-burnt-orange transition-colors duration-300">Purposeful Communicator Challenge: Master Your Message</h3>
                                                 <p class="text-allgood-dark-cyan mt-2 text-sm flex-grow">Master the art of <strong>positive influence</strong> and <strong>clear communication</strong>. Learn to craft messages, give constructive feedback, and lead digital conversations with purpose and empathy.</p>
                                             </div>
                                             <!-- Full Content View (Hidden by default) -->
@@ -408,7 +359,7 @@
                                                     </svg>
                                                 </button>
                                                 <div class="max-w-md w-full text-left">
-                                                    <h3 class="font-literata text-lg font-semibold text-allgood-dark-cyan mb-4">Purposeful Communicator: Master Your Message</h3>
+                                                    <h3 class="font-literata text-lg font-semibold text-allgood-dark-cyan mb-4">Purposeful Communicator Challenge: Master Your Message</h3>
                                                     <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mt-4">Game Description</h4>
                                                     <p class="text-allgood-dark-cyan mt-1 text-sm leading-relaxed mb-4">This interactive training focuses on transforming how you express yourself in the digital age. You will learn to shift from reactive posting to <strong>proactive, thoughtful communication</strong>. Scenarios focus on mastering tone, giving and receiving constructive feedback, leading group discussions, and building a reputation as a <strong>reliable and respected voice</strong> in any community.</p>
                                                     <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mt-4">Learning Objectives</h4>
@@ -420,7 +371,8 @@
                                                     </ul>
                                                     <div class="mt-6 pt-4 border-t border-gray-200">
                                                         <div class="flex justify-center space-x-4">
-                                                            <button class="launch-course-button bg-allgood-light-cyan text-white font-bold py-2 px-4 rounded-lg hover:bg-allgood-dark-cyan transition-colors duration-300 shadow-md text-xs">Launch Game</button>
+                                                            <!-- Updated button styling and text -->
+                                                            <button class="launch-course-button bg-allgood-burnt-orange text-white font-bold py-2 px-4 rounded-lg hover:bg-allgood-light-orange transition-colors duration-300 shadow-md text-xs">Launch Challenge</button>
                                                             <button class="exit-button bg-transparent hover:bg-allgood-dark-cyan text-allgood-dark-cyan hover:text-white border border-allgood-dark-cyan font-bold py-2 px-4 rounded-lg text-xs transition-colors duration-300">Exit</button>
                                                         </div>
                                                     </div>
@@ -503,7 +455,7 @@
             if (footer) footer.style.display = 'none';
             courseView.style.display = 'block';
 
-            // Use pushState to update the URL for sharing/tracking (Option 2)
+            // Use pushState to update the URL for sharing/tracking
             const newUrlPath = `educational_games.html#game/${gameId}`;
             if (window.location.hash !== `#game/${gameId}`) {
                 history.pushState({ gameId: gameId }, '', newUrlPath);
@@ -519,7 +471,7 @@
             if (footer) footer.style.display = 'block';
             courseView.style.display = 'none';
             
-            // Clear the URL hash when showing the catalog (Option 2)
+            // Clear the URL hash when showing the catalog
             history.pushState({}, '', 'educational_games.html'); 
         }
         
@@ -542,55 +494,17 @@
                 }
             });
             
-            // --- Existing Catalog Interaction Logic ---
-            const pageContent = document.getElementById('page-content');
-            const footer = document.querySelector('footer');
-            const courseView = document.getElementById('course-view');
-            const courseIframe = document.getElementById('course-iframe');
-            const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-            
+            // --- Catalog Interaction Logic (Simplified for Tap/Click) ---
             function getCourseTilesAndAddListeners() {
                 document.querySelectorAll('.course-tile-link').forEach(tile => {
-                    // Update data-game-id attribute to use clean, URL-safe names
+                    // Update data-game-id attribute
                     let gameId = tile.dataset.gameId;
                     if (!gameId) {
-                        // Attempt to infer ID if not explicitly set (only for older tile, won't run now)
                         gameId = tile.querySelector('h3').textContent.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
                         tile.dataset.gameId = gameId;
                     }
                     
-                    let hoverTimeout;
-                    
-                    const progressCircle = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-                    progressCircle.setAttribute('class', 'progress-circle');
-                    progressCircle.setAttribute('viewBox', '0 0 100 100');
-                    progressCircle.innerHTML = '<circle cx="50" cy="50" r="45" fill="none" stroke="#ccc" stroke-width="10"></circle><circle class="progress-ring" cx="50" cy="50" r="45" fill="none" stroke-width="10" stroke-linecap="round"></circle>';
-                    tile.appendChild(progressCircle);
-                    
-                    const progressRing = progressCircle.querySelector('.progress-ring');
-                    const circumference = 2 * Math.PI * 45;
-                    progressRing.style.strokeDasharray = `${circumference} ${circumference}`;
-                    progressRing.style.strokeDashoffset = circumference;
-
-                    if (!isTouchDevice) {
-                        tile.addEventListener('mouseenter', function() {
-                            hoverTimeout = setTimeout(() => {
-                                if (!tile.classList.contains('expanded')) {
-                                    tile.classList.add('expanded');
-                                    progressCircle.classList.remove('active');
-                                    document.getElementById('modal-overlay').classList.add('active');
-                                }
-                            }, 600);
-                            progressCircle.classList.add('active');
-                        });
-                        tile.addEventListener('mouseleave', function() {
-                             clearTimeout(hoverTimeout);
-                            if (!tile.classList.contains('expanded')) {
-                                progressCircle.classList.remove('active');
-                            }
-                        });
-                    }
-
+                    // --- Button Handlers ---
                     const closeButton = tile.querySelector('.close-card-button');
                     if (closeButton) {
                         closeButton.addEventListener('click', function(e) {
@@ -598,7 +512,6 @@
                             if (tile.classList.contains('expanded')) {
                                 tile.classList.remove('expanded');
                                 document.getElementById('modal-overlay').classList.remove('active');
-                                progressCircle.classList.remove('active');
                             }
                         });
                     }
@@ -610,7 +523,6 @@
                              if (tile.classList.contains('expanded')) {
                                 tile.classList.remove('expanded');
                                 document.getElementById('modal-overlay').classList.remove('active');
-                                progressCircle.classList.remove('active');
                             }
                         });
                     }
@@ -623,7 +535,6 @@
                             if (tile.classList.contains('expanded')) {
                                 tile.classList.remove('expanded');
                                 document.getElementById('modal-overlay').classList.remove('active');
-                                progressCircle.classList.remove('active');
                             }
                             if (launchGameId) {
                                 loadGameView(launchGameId);
@@ -631,33 +542,40 @@
                         });
                     }
                     
+                    // --- Overlay Click Handler (Closes the modal) ---
                     document.getElementById('modal-overlay').addEventListener('click', function() {
                          document.querySelectorAll('.course-tile-link.expanded').forEach(expandedTile => {
                             expandedTile.classList.remove('expanded');
                             document.getElementById('modal-overlay').classList.remove('active');
-                            expandedTile.querySelector('.progress-circle').classList.remove('active');
                          });
                     });
 
+                    // --- PRIMARY CLICK/TAP HANDLER (Opens the modal) ---
                     tile.addEventListener('click', function(e) {
-                        if (isTouchDevice && !tile.classList.contains('expanded')) {
-                            e.preventDefault(); 
+                        // Check if the click target is already one of the action buttons inside the card
+                        const isInternalButton = e.target.closest('.launch-course-button, .exit-button, .close-card-button');
+                        if (isInternalButton) {
+                            // If it's a button, let the button's specific handler run and return
+                            return;
+                        }
+                        
+                        e.preventDefault(); 
+                        
+                        // Toggle the expanded state on any click of the card body
+                        if (tile.classList.contains('expanded')) {
+                            // Close the currently expanded card
+                            tile.classList.remove('expanded');
+                            document.getElementById('modal-overlay').classList.remove('active');
+                        } else {
+                            // Close any other open cards
                             document.querySelectorAll('.course-tile-link.expanded').forEach(openTile => {
                                 if(openTile !== tile) {
                                     openTile.classList.remove('expanded');
                                 }
                             });
+                            // Open this card
                             tile.classList.add('expanded');
                             document.getElementById('modal-overlay').classList.add('active');
-                            return; 
-                        }
-                        if (tile.classList.contains('expanded')) {
-                            e.stopPropagation();
-                            return;
-                        }
-                        const launchGameId = e.currentTarget.dataset.gameId;
-                        if (launchGameId) {
-                            loadGameView(launchGameId);
                         }
                     });
                 });
