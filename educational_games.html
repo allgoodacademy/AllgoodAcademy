@@ -328,7 +328,7 @@
                                 <div class="border-t border-gray-200 pt-6">
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <!-- Game Tile 3: Digital Decisions -->
-                                        <div class="course-tile-link group bg-gradient-to-br from-white via-blue-50 to-orange-50 rounded-lg border-2 border-transparent hover:border-allgood-burnt-orange transition-all duration-300 flex flex-col overflow-hidden text-center cursor-pointer" data-course-url="https://theallgoodacademy.s3.us-east-2.amazonaws.com/Digital+Decisions/index.html">
+                                        <div class="course-tile-link group bg-gradient-to-br from-white via-blue-50 to-orange-50 rounded-lg border-2 border-transparent hover:border-allgood-burnt-orange transition-all duration-300 flex flex-col overflow-hidden text-center cursor-pointer" data-course-url="https://theallgoodacademy.s3.us-east-2.amazonaws.com/Digital+Decisions/index.html" data-game-id="DigitalDecisions">
                                             <div class="p-4 flex flex-col flex-grow course-content-short">
                                                 <h3 class="font-literata text-lg font-semibold text-allgood-dark-cyan group-hover:text-allgood-burnt-orange transition-colors duration-300">Digital Decisions: Managing Your Online Footprint</h3>
                                                 <p class="text-allgood-dark-cyan mt-2 text-sm flex-grow">Test your <strong>digital citizenship and social skills</strong> by navigating 30 real-world scenarios. Learn to protect your privacy, combat misinformation, and communicate ethically online.</p>
@@ -362,7 +362,7 @@
                                         </div>
                                         
                                         <!-- Game Tile 4: CONFLICT RESOLUTION CHALLENGE -->
-                                        <div class="course-tile-link group bg-gradient-to-br from-white via-blue-50 to-orange-50 rounded-lg border-2 border-transparent hover:border-allgood-burnt-orange transition-all duration-300 flex flex-col overflow-hidden text-center cursor-pointer" data-course-url="https://theallgoodacademy.s3.us-east-2.amazonaws.com/Conflict+Resolution/index.html">
+                                        <div class="course-tile-link group bg-gradient-to-br from-white via-blue-50 to-orange-50 rounded-lg border-2 border-transparent hover:border-allgood-burnt-orange transition-all duration-300 flex flex-col overflow-hidden text-center cursor-pointer" data-course-url="https://theallgoodacademy.s3.us-east-2.amazonaws.com/Conflict+Resolution/index.html" data-game-id="ConflictResolution">
                                             <div class="p-4 flex flex-col flex-grow course-content-short">
                                                 <h3 class="font-literata text-lg font-semibold text-allgood-dark-cyan group-hover:text-allgood-burnt-orange transition-colors duration-300">Conflict Resolution Challenge: Navigating Disagreement</h3>
                                                 <p class="text-allgood-dark-cyan mt-2 text-sm flex-grow">Master <strong>high-stakes communication</strong> by using empathy and assertive language to mediate disagreements, set boundaries, and turn everyday friction into <strong>positive collaboration</strong> in both digital and real-world settings.</p>
@@ -395,7 +395,7 @@
                                         </div>
 
                                         <!-- Game Tile 5: PURPOSEFUL COMMUNICATOR -->
-                                        <div class="course-tile-link group bg-gradient-to-br from-white via-blue-50 to-orange-50 rounded-lg border-2 border-transparent hover:border-allgood-burnt-orange transition-all duration-300 flex flex-col overflow-hidden text-center cursor-pointer" data-course-url="https://theallgoodacademy.s3.us-east-2.amazonaws.com/purposeful+communicator/index.html">
+                                        <div class="course-tile-link group bg-gradient-to-br from-white via-blue-50 to-orange-50 rounded-lg border-2 border-transparent hover:border-allgood-burnt-orange transition-all duration-300 flex flex-col overflow-hidden text-center cursor-pointer" data-course-url="https://theallgoodacademy.s3.us-east-2.amazonaws.com/purposeful+communicator/index.html" data-game-id="PurposefulCommunicator">
                                             <div class="p-4 flex flex-col flex-grow course-content-short">
                                                 <h3 class="font-literata text-lg font-semibold text-allgood-dark-cyan group-hover:text-allgood-burnt-orange transition-colors duration-300">Purposeful Communicator: Master Your Message</h3>
                                                 <p class="text-allgood-dark-cyan mt-2 text-sm flex-grow">Master the art of <strong>positive influence</strong> and <strong>clear communication</strong>. Learn to craft messages, give constructive feedback, and lead digital conversations with purpose and empathy.</p>
@@ -466,136 +466,168 @@
     </svg>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        // Mapping of URL parameters to game file URLs
+        const GAME_MAP = {
+            'Jolene': "https://theallgoodacademy.s3.us-east-2.amazonaws.com/Jolene's+Lemonade+Stand/index.html.txt",
+            'DigitalDecisions': "https://theallgoodacademy.s3.us-east-2.amazonaws.com/Digital+Decisions/index.html",
+            'ConflictResolution': "https://theallgoodacademy.s3.us-east-2.amazonaws.com/Conflict+Resolution/index.html",
+            'PurposefulCommunicator': "https://theallgoodacademy.s3.us-east-2.amazonaws.com/purposeful+communicator/index.html",
+        };
+
+        function getGameUrlFromQuery() {
+            const params = new URLSearchParams(window.location.search);
+            const gameId = params.get('game');
+            if (gameId && GAME_MAP[gameId]) {
+                return GAME_MAP[gameId];
+            }
+            return null;
+        }
+
+        function loadGameView(url) {
             const pageContent = document.getElementById('page-content');
             const footer = document.querySelector('footer');
             const courseView = document.getElementById('course-view');
             const courseIframe = document.getElementById('course-iframe');
-            const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+
+            courseIframe.src = url;
+            pageContent.style.display = 'none';
+            if (footer) footer.style.display = 'none';
+            courseView.style.display = 'block';
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const gameUrl = getGameUrlFromQuery();
             
-            function getCourseTilesAndAddListeners() {
-                document.querySelectorAll('.course-tile-link').forEach(tile => {
-                    let hoverTimeout;
-                    
-                    const progressCircle = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-                    progressCircle.setAttribute('class', 'progress-circle');
-                    progressCircle.setAttribute('viewBox', '0 0 100 100');
-                    progressCircle.innerHTML = '<circle cx="50" cy="50" r="45" fill="none" stroke="#ccc" stroke-width="10"></circle><circle class="progress-ring" cx="50" cy="50" r="45" fill="none" stroke-width="10" stroke-linecap="round"></circle>';
-                    tile.appendChild(progressCircle);
-                    
-                    const progressRing = progressCircle.querySelector('.progress-ring');
-                    const circumference = 2 * Math.PI * 45;
-                    progressRing.style.strokeDasharray = `${circumference} ${circumference}`;
-                    progressRing.style.strokeDashoffset = circumference;
+            if (gameUrl) {
+                // If a game parameter is found in the URL, load the game immediately.
+                loadGameView(gameUrl);
+                // Optionally, we can also update the browser history here to clean the URL if needed, 
+                // but keeping it simple for now as the goal is a sharable link.
+            } else {
+                // Otherwise, proceed with the normal catalog view setup.
+                const pageContent = document.getElementById('page-content');
+                const footer = document.querySelector('footer');
+                const courseView = document.getElementById('course-view');
+                const courseIframe = document.getElementById('course-iframe');
+                const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+                
+                function getCourseTilesAndAddListeners() {
+                    document.querySelectorAll('.course-tile-link').forEach(tile => {
+                        let hoverTimeout;
+                        
+                        const progressCircle = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                        progressCircle.setAttribute('class', 'progress-circle');
+                        progressCircle.setAttribute('viewBox', '0 0 100 100');
+                        progressCircle.innerHTML = '<circle cx="50" cy="50" r="45" fill="none" stroke="#ccc" stroke-width="10"></circle><circle class="progress-ring" cx="50" cy="50" r="45" fill="none" stroke-width="10" stroke-linecap="round"></circle>';
+                        tile.appendChild(progressCircle);
+                        
+                        const progressRing = progressCircle.querySelector('.progress-ring');
+                        const circumference = 2 * Math.PI * 45;
+                        progressRing.style.strokeDasharray = `${circumference} ${circumference}`;
+                        progressRing.style.strokeDashoffset = circumference;
 
-                    if (!isTouchDevice) {
-                        tile.addEventListener('mouseenter', function() {
-                            hoverTimeout = setTimeout(() => {
+                        if (!isTouchDevice) {
+                            tile.addEventListener('mouseenter', function() {
+                                hoverTimeout = setTimeout(() => {
+                                    if (!tile.classList.contains('expanded')) {
+                                        tile.classList.add('expanded');
+                                        progressCircle.classList.remove('active');
+                                        document.getElementById('modal-overlay').classList.add('active');
+                                    }
+                                }, 600);
+                                progressCircle.classList.add('active');
+                            });
+                            tile.addEventListener('mouseleave', function() {
+                                 clearTimeout(hoverTimeout);
                                 if (!tile.classList.contains('expanded')) {
-                                    tile.classList.add('expanded');
                                     progressCircle.classList.remove('active');
-                                    document.getElementById('modal-overlay').classList.add('active');
-                                }
-                            }, 600);
-                            progressCircle.classList.add('active');
-                        });
-                        tile.addEventListener('mouseleave', function() {
-                             clearTimeout(hoverTimeout);
-                            if (!tile.classList.contains('expanded')) {
-                                progressCircle.classList.remove('active');
-                            }
-                        });
-                    }
-
-                    const closeButton = tile.querySelector('.close-card-button');
-                    if (closeButton) {
-                        closeButton.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            if (tile.classList.contains('expanded')) {
-                                tile.classList.remove('expanded');
-                                document.getElementById('modal-overlay').classList.remove('active');
-                                progressCircle.classList.remove('active');
-                            }
-                        });
-                    }
-
-                    const exitButton = tile.querySelector('.exit-button');
-                    if (exitButton) {
-                        exitButton.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                             if (tile.classList.contains('expanded')) {
-                                tile.classList.remove('expanded');
-                                document.getElementById('modal-overlay').classList.remove('active');
-                                progressCircle.classList.remove('active');
-                            }
-                        });
-                    }
-
-                    const launchButton = tile.querySelector('.launch-course-button');
-                    if (launchButton) {
-                        launchButton.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            const courseUrl = tile.dataset.courseUrl;
-                            if (tile.classList.contains('expanded')) {
-                                tile.classList.remove('expanded');
-                                document.getElementById('modal-overlay').classList.remove('active');
-                                progressCircle.classList.remove('active');
-                            }
-                            if (courseUrl) {
-                                courseIframe.src = courseUrl;
-                                pageContent.style.display = 'none';
-                                if (footer) footer.style.display = 'none';
-                                courseView.style.display = 'block';
-                            }
-                        });
-                    }
-                    
-                    document.getElementById('modal-overlay').addEventListener('click', function() {
-                         document.querySelectorAll('.course-tile-link.expanded').forEach(expandedTile => {
-                            expandedTile.classList.remove('expanded');
-                            document.getElementById('modal-overlay').classList.remove('active');
-                            expandedTile.querySelector('.progress-circle').classList.remove('active');
-                         });
-                    });
-
-                    tile.addEventListener('click', function(e) {
-                        if (isTouchDevice && !tile.classList.contains('expanded')) {
-                            e.preventDefault(); 
-                            document.querySelectorAll('.course-tile-link.expanded').forEach(openTile => {
-                                if(openTile !== tile) {
-                                    openTile.classList.remove('expanded');
                                 }
                             });
-                            tile.classList.add('expanded');
-                            document.getElementById('modal-overlay').classList.add('active');
-                            return; 
                         }
-                        if (tile.classList.contains('expanded')) {
-                            e.stopPropagation();
-                            return;
+
+                        const closeButton = tile.querySelector('.close-card-button');
+                        if (closeButton) {
+                            closeButton.addEventListener('click', function(e) {
+                                e.stopPropagation();
+                                if (tile.classList.contains('expanded')) {
+                                    tile.classList.remove('expanded');
+                                    document.getElementById('modal-overlay').classList.remove('active');
+                                    progressCircle.classList.remove('active');
+                                }
+                            });
                         }
-                        const courseUrl = e.currentTarget.dataset.courseUrl;
-                        if (courseUrl) {
-                            courseIframe.src = courseUrl;
-                            pageContent.style.display = 'none';
-                            if (footer) footer.style.display = 'none';
-                            courseView.style.display = 'block';
+
+                        const exitButton = tile.querySelector('.exit-button');
+                        if (exitButton) {
+                            exitButton.addEventListener('click', function(e) {
+                                e.stopPropagation();
+                                 if (tile.classList.contains('expanded')) {
+                                    tile.classList.remove('expanded');
+                                    document.getElementById('modal-overlay').classList.remove('active');
+                                    progressCircle.classList.remove('active');
+                                }
+                            });
                         }
+
+                        const launchButton = tile.querySelector('.launch-course-button');
+                        if (launchButton) {
+                            launchButton.addEventListener('click', function(e) {
+                                e.stopPropagation();
+                                const courseUrl = tile.dataset.courseUrl;
+                                if (tile.classList.contains('expanded')) {
+                                    tile.classList.remove('expanded');
+                                    document.getElementById('modal-overlay').classList.remove('active');
+                                    progressCircle.classList.remove('active');
+                                }
+                                if (courseUrl) {
+                                    loadGameView(courseUrl);
+                                }
+                            });
+                        }
+                        
+                        document.getElementById('modal-overlay').addEventListener('click', function() {
+                             document.querySelectorAll('.course-tile-link.expanded').forEach(expandedTile => {
+                                expandedTile.classList.remove('expanded');
+                                document.getElementById('modal-overlay').classList.remove('active');
+                                expandedTile.querySelector('.progress-circle').classList.remove('active');
+                             });
+                        });
+
+                        tile.addEventListener('click', function(e) {
+                            if (isTouchDevice && !tile.classList.contains('expanded')) {
+                                e.preventDefault(); 
+                                document.querySelectorAll('.course-tile-link.expanded').forEach(openTile => {
+                                    if(openTile !== tile) {
+                                        openTile.classList.remove('expanded');
+                                    }
+                                });
+                                tile.classList.add('expanded');
+                                document.getElementById('modal-overlay').classList.add('active');
+                                return; 
+                            }
+                            if (tile.classList.contains('expanded')) {
+                                e.stopPropagation();
+                                return;
+                            }
+                            const courseUrl = e.currentTarget.dataset.courseUrl;
+                            if (courseUrl) {
+                                loadGameView(courseUrl);
+                            }
+                        });
+                    });
+                }
+                
+                getCourseTilesAndAddListeners();
+
+                // --- Collapsible Section Logic ---
+                document.querySelectorAll('.collapsible-header').forEach(header => {
+                    header.addEventListener('click', () => {
+                        const section = header.parentElement;
+                        section.classList.toggle('open');
                     });
                 });
             }
             
-            getCourseTilesAndAddListeners();
-
-            // --- Collapsible Section Logic ---
-            document.querySelectorAll('.collapsible-header').forEach(header => {
-                header.addEventListener('click', () => {
-                    const section = header.parentElement;
-                    section.classList.toggle('open');
-                });
-            });
-
-            // The Educational Games page does not have a hero block, so we omit the hero block logic.
             
             // --- Disable Right-Click ---
             document.addEventListener('contextmenu', function(e) {
