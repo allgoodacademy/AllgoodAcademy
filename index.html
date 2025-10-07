@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Literata:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- NEW DEPENDENCY: Font Awesome for high-quality social icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLMDJ8y/H0wZ/U9fKjT2YtGz3l8L035qQ7B1tT84YhE/v9z0V9Wk+I2v74W83jLg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Libraries for interactive hero --><script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
     <style>
@@ -263,11 +264,30 @@
                         <p class="text-gray-600 leading-relaxed">
                             Our journey to purposeful action starts here. Join our community to get exclusive content and updates. We're here to help you grow.
                         </p>
-                        <div class="mt-6 border-t border-gray-200 pt-6 text-center">
-                            <!-- FIXED: Updated button to point to the internal contact_us.html page --><a href="contact_us.html" class="inline-block bg-allgood-light-cyan text-white font-bold py-3 px-8 rounded-lg hover:bg-allgood-dark-cyan transition-colors duration-300 shadow-md">
+                        <!-- START: Flex container for button and social icons, centered and responsive -->
+                        <div class="mt-6 border-t border-gray-200 pt-6 flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+                            <!-- FIXED: Updated button to point to the internal contact_us.html page -->
+                            <a href="contact_us.html" class="inline-block bg-allgood-light-cyan text-white font-bold py-3 px-8 rounded-lg hover:bg-allgood-dark-cyan transition-colors duration-300 shadow-md whitespace-nowrap">
                                 Join the Community
                             </a>
+
+                            <!-- Social Icons Container (Deep Cyan with Burnt Orange hover) - NEW FONT AWESOME ICONS -->
+                            <div class="flex space-x-4">
+                                <!-- Facebook Icon (Font Awesome) - FIXED LINK -->
+                                <a href="https://www.facebook.com/TheAllgoodAcademy" target="_blank" rel="noopener noreferrer" title="Facebook" class="text-allgood-dark-cyan hover:text-allgood-burnt-orange transition-colors duration-200 text-3xl">
+                                    <i class="fa-brands fa-square-facebook"></i>
+                                </a>
+                                <!-- LinkedIn Icon (Font Awesome) - FIXED LINK -->
+                                <a href="https://www.linkedin.com/company/the-allgood-academy/?viewAsMember=true" target="_blank" rel="noopener noreferrer" title="LinkedIn" class="text-allgood-dark-cyan hover:text-allgood-burnt-orange transition-colors duration-200 text-3xl">
+                                    <i class="fa-brands fa-linkedin"></i>
+                                </a>
+                                <!-- Instagram Icon (Font Awesome) - FIXED LINK -->
+                                <a href="https://www.instagram.com/allgoodacademy/" target="_blank" rel="noopener noreferrer" title="Instagram" class="text-allgood-dark-cyan hover:text-allgood-burnt-orange transition-colors duration-200 text-3xl">
+                                    <i class="fa-brands fa-square-instagram"></i>
+                                </a>
+                            </div>
                         </div>
+                        <!-- END: Flex container for button and social icons -->
                     </section>
                 </div>
             </div>
